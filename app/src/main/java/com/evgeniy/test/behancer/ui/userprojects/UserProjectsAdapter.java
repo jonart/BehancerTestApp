@@ -1,0 +1,59 @@
+package com.evgeniy.test.behancer.ui.userprojects;
+
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.evgeniy.test.behancer.R;
+import com.evgeniy.test.behancer.data.model.project.Project;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserProjectsAdapter extends RecyclerView.Adapter<UserProjectsHolder> {
+
+    @NonNull
+    private final List<Project> mProjects = new ArrayList<>();
+    private final UserProjectsAdapter.OnItemClickListener mOnItemClickListener;
+
+    public UserProjectsAdapter(UserProjectsAdapter.OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    @NonNull
+    @Override
+    public UserProjectsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.li_projects, parent, false);
+        return new UserProjectsHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull UserProjectsHolder holder, int position) {
+        Project project = mProjects.get(position);
+        holder.bind(project, mOnItemClickListener);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mProjects.size();
+    }
+
+    public void addData(List<Project> data, boolean isRefreshed) {
+        if (isRefreshed) {
+            mProjects.clear();
+        }
+
+        // TODO: 09.04.2018 ДЗ обработать кейс с data.size == 0 || data == null
+
+        mProjects.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener {
+
+        void onItemClick(String username);
+    }
+}
